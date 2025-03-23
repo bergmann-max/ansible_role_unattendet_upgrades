@@ -1,9 +1,25 @@
 ---
-# roles/ansible_role_template/meta/main.yml
+# roles/unattended_upgrades/meta/main.yml
 
 galaxy_info:
+  role_name: unattended_upgrades
   author: Max Bergmann
-  description: An Ansible role template
+  description: Installs and configures unattended-upgrades on Debian/Ubuntu systems for automatic security updates.
   license: MIT
   min_ansible_version: "2.9"
+  platforms:
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - security
+    - unattended
+    - upgrades
+    - apt
+    - system
+    - updates
+
 dependencies: []

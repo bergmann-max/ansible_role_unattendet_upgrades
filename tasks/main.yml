@@ -1,5 +1,5 @@
 ---
-# roles/unattended-upgrades/tasks/unattended-upgrades.yml
+# roles/unattended_upgrades/tasks/unattended-upgrades.yml
 
 - name: Install unattended-upgrades
   ansible.builtin.apt:
