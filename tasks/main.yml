@@ -1,7 +1,35 @@
 ---
-# roles/ansible_role_template/tasks/main.yml
+# roles/unattended-upgrades/tasks/unattended-upgrades.yml
 
-- name: Update repositories cache and install "foo" package
+- name: Install unattended-upgrades
   ansible.builtin.apt:
-    name: foo
-    update_cache: yes
+    pkg: "unattended-upgrades"
+    state: present
+
+- name: Create apt file that would be made by interactive dpkg-reconfigure
+  ansible.builtin.file:
+    path: "/etc/apt/apt.conf.d/20auto-upgrades"
+    owner: "root"
+    group: "root"
+    mode: "u=rw,g=r,0=r"
+    state: file
+
+- name: Populate 20auto-upgrades apt file
+  ansible.builtin.lineinfile:
+    dest: "/etc/apt/apt.conf.d/20auto-upgrades"
+    line: '{{ item }}'
+  loop:
+    - 'APT::Periodic::Update-Package-Lists "1";'
+    - 'APT::Periodic::Unattended-Upgrade "1";'
+
+- name: Enable remove unused deps in /etc/apt/apt.conf.d/50unattended-upgrades
+  ansible.builtin.lineinfile:
+    dest: "/etc/apt/apt.conf.d/50unattended-upgrades"
+    line: 'Unattended-Upgrade::Remove-Unused-Dependencies "true";'
+    insertafter: '^//Unattended-Upgrade::Remove-Unused-Dependencies'
+
+- name: Enable and start unattended-upgrades service
+  ansible.builtin.systemd:
+    name: unattended-upgrades
+    enabled: true
+    state: started
