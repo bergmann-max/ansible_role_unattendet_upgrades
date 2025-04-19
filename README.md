@@ -1,85 +1,69 @@
-# Ansible Role: unattended_upgrades
+# Ansible Role: ansible_role_unattended_upgrades
 
 ![Ansible](https://img.shields.io/badge/ansible-ready-blue.svg)
-![Platform](https://img.shields.io/badge/platform-Debian%2FUbuntu-lightgrey)
-![License](https://img.shields.io/badge/license-MIT-green)
+![Platform](https://img.shields.io/badge/platform-Ubuntu-lightgrey)
+![License](https://img.shields.io/badge/license-Unlicense-green)
 
 ## Description
 
-This Ansible role installs and configures **unattended-upgrades** on Debian/Ubuntu systems.  
-It ensures that security updates and package list updates are applied automatically, reducing manual maintenance and improving system security.
+This Ansible role installs and configures **unattended-upgrades** on Ubuntu systems.  
+It ensures that the system is kept up-to-date with security patches and optionally removes unused dependencies automatically.  
+The role also configures systemd timers to activate automatic upgrade mechanisms reliably.
 
 ### Features:
-- Fully supports **Debian-family systems** (Ubuntu, Debian)
-- Installs and configures **unattended-upgrades**
-- Enables automatic:
-  - **Package list updates**
-  - **Unattended security upgrades**
-  - **Removal of unused dependencies**
-- Ensures the `unattended-upgrades` service is enabled and started
-
----
-
-## Supported Platforms
-
-Any APT-based Debian-family system (Ubuntu, Debian).
-
----
+- Installs the `unattended-upgrades` package
+- Configures automatic daily updates and upgrades
+- Enables removal of unused dependencies
+- Ensures the `apt-daily-upgrade.timer` is enabled and running
 
 ## Role Variables
 
-This role uses default configuration for most cases, but allows customization via:
-
-| Variable                                            | Default Value | Description                                              |
-|-----------------------------------------------------|--------------|----------------------------------------------------------|
-| `unattended_upgrades_remove_unused_dependencies`    | `true`       | Whether to remove unused dependencies after upgrades      |
-| `unattended_upgrades_update_package_lists`          | `1`          | Whether to enable periodic package list updates           |
-| `unattended_upgrades_enable`                        | `1`          | Whether to enable unattended-upgrades itself              |
-
-*Note:* These variables are currently hardcoded in the tasks. For more flexibility, you can expose them as variables if needed.
-
----
+This role does not require custom variables for standard operation.  
+All configuration values are statically defined for secure defaults.  
+However, you can override task files or handlers via role customization if needed.
 
 ## Usage Example
 
 ```yaml
-- name: Configure unattended-upgrades
+- name: Configure unattended upgrades
   hosts: all
   become: true
   roles:
-    - role: unattended_upgrades
+    - role: ansible_role_unattended_upgrades
 ```
-
----
-
-## Tags
-
-| Tag               | Purpose                                       |
-|-------------------|-----------------------------------------------|
-| unattended        | Install unattended-upgrades                   |
-| security-updates  | Enable automatic security updates             |
-| system            | System maintenance and cleanup                |
-
----
 
 ## Sanity Checks
 
-The role ensures:
+This role ensures:
+- `unattended-upgrades` is installed
+- `/etc/apt/apt.conf.d/20auto-upgrades` is configured for daily checks and upgrades
+- `/etc/apt/apt.conf.d/50unattended-upgrades` is adjusted to remove unused dependencies
+- `apt-daily-upgrade.timer` is enabled and active
 
-- The `unattended-upgrades` package is installed
-- `/etc/apt/apt.conf.d/20auto-upgrades` contains correct update settings
-- `/etc/apt/apt.conf.d/50unattended-upgrades` enables removal of unused dependencies
-- The `unattended-upgrades` service is enabled and running
+## Directory Structure
 
----
+Follows standard Ansible role layout:
+
+```
+ansible_role_unattended_upgrades/
+├── defaults/
+│   └── main.yml
+├── handlers/
+│   └── main.yml
+├── meta/
+│   └── main.yml
+├── tasks/
+│   └── main.yml
+└── README.md
+```
+
+✔️ Designed for secure, automated system maintenance in homelab and production environments.
 
 ## License
 
-MIT
-
----
+Unlicense
 
 ## Author Information
 
-Role maintained by **Max Bergmann**.  
-Feel free to contribute, suggest improvements, or raise issues!
+Role maintained by Max Bergmann.  
+Feedback, suggestions, and contributions are always welcome! 🚀
