@@ -42,7 +42,6 @@ This role ensures:
 - `/etc/apt/apt.conf.d/20auto-upgrades` is configured for daily checks and upgrades
 - `/etc/apt/apt.conf.d/50unattended-upgrades` is deployed via Jinja2 template
 - `apt-daily-upgrade.timer` is enabled and active
-- Removal of unused dependencies is enabled
 
 ## Directory Structure
 
